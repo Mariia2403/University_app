@@ -1,0 +1,124 @@
+/* Загальні стилі */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Контейнер */
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* Jumbotron */
+.jumbotron {
+    border: 2px solid #e9ecef;
+}
+
+/* Таблиця */
+.table {
+    margin-top: 20px;
+}
+
+.table thead th {
+    border-top: none;
+}
+
+/* Кнопки */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Картки */
+.card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Пагінація */
+.pagination {
+    margin-top: 30px;
+}
+
+.page-link {
+    color: #0d6efd;
+}
+
+.page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+}
+
+/* Фільтри */
+.form-select, .form-control {
+    border: 2px solid #e9ecef;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Бейджі */
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+}
+
+/* Таблиця */
+.table td {
+    vertical-align: middle;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .table {
+        font-size: 0.9rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+

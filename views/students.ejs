@@ -1,0 +1,224 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📚 Список студентів 
+        <% if (totalStudents > 0) { %>
+            <span class="badge bg-primary"><%= totalStudents %></span>
+        <% } %>
+    </h1>
+    <a href="/students/create" class="btn btn-success">+ Додати студента</a>
+</div>
+
+<!-- Форма фільтрів -->
+<form method="GET" action="/students" class="mb-4">
+    <div class="row g-3">
+        <!-- Пошук -->
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">🔍</span>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    name="search"
+                    value="<%= search %>"
+                    placeholder="Пошук по імені або email..."
+                >
+            </div>
+        </div>
+        
+        <!-- Фільтр по курсу -->
+        <div class="col-md-2">
+            <select class="form-select" name="course">
+                <option value="">Всі курси</option>
+                <option value="1" <%= courseFilter === '1' ? 'selected' : '' %>>1 курс</option>
+                <option value="2" <%= courseFilter === '2' ? 'selected' : '' %>>2 курс</option>
+                <option value="3" <%= courseFilter === '3' ? 'selected' : '' %>>3 курс</option>
+                <option value="4" <%= courseFilter === '4' ? 'selected' : '' %>>4 курс</option>
+            </select>
+        </div>
+        
+        <!-- Сортування -->
+        <div class="col-md-2">
+            <select class="form-select" name="sort">
+                <option value="firstName" <%= sortBy === 'firstName' ? 'selected' : '' %>>По імені</option>
+                <option value="lastName" <%= sortBy === 'lastName' ? 'selected' : '' %>>По прізвищу</option>
+                <option value="age" <%= sortBy === 'age' ? 'selected' : '' %>>По віку</option>
+                <option value="course" <%= sortBy === 'course' ? 'selected' : '' %>>По курсу</option>
+            </select>
+        </div>
+        
+        <!-- Порядок сортування -->
+        <div class="col-md-2">
+            <select class="form-select" name="order">
+                <option value="asc" <%= sortOrder === 'asc' ? 'selected' : '' %>>Зростання ↑</option>
+                <option value="desc" <%= sortOrder === 'desc' ? 'selected' : '' %>>Спадання ↓</option>
+            </select>
+        </div>
+        
+        <!-- Кнопки -->
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Застосувати</button>
+        </div>
+    </div>
+    
+    <!-- Кнопка скидання фільтрів -->
+    <% if (search || courseFilter) { %>
+        <div class="mt-2">
+            <a href="/students" class="btn btn-sm btn-outline-secondary">
+                ❌ Скинути фільтри
+            </a>
+        </div>
+    <% } %>
+</form>
+
+<!-- Таблиця студентів -->
+<% if (students.length > 0) { %>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Ім'я</th>
+                    <th>Прізвище</th>
+                    <th>Вік</th>
+                    <th>Курс</th>
+                    <th>Email</th>
+                    <th style="width: 280px;">Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% students.forEach(function(student) { %>
+                    <tr>
+                        <td><%= student.id %></td>
+                        <td><%= student.firstName %></td>
+                        <td><%= student.lastName %></td>
+                        <td><%= student.age %></td>
+                        <td><%= student.course %> курс</td>
+                        <td><%= student.email %></td>
+                        <td>
+                            <a href="/students/<%= student.id %>" class="btn btn-sm btn-info" title="Переглянути">
+                                👁️
+                            </a>
+                            <a href="/students/<%= student.id %>/edit" class="btn btn-sm btn-warning" title="Редагувати">
+                                ✏️
+                            </a>
+                            <form method="POST" action="/students/<%= student.id %>/delete" style="display: inline;">
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('Ви впевнені, що хочете видалити <%= student.firstName %> <%= student.lastName %>?')"
+                                    title="Видалити"
+                                >
+                                    🗑️
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ПАГІНАЦІЯ -->
+    <% if (totalPages > 1) { %>
+        <nav aria-label="Pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- Попередня сторінка -->
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>&search=<%= search %>&course=<%= courseFilter %>&sort=<%= sortBy %>&order=<%= sortOrder %>">
+                            ← Попередня
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link">← Попередня</span>
+                    </li>
+                <% } %>
+
+                <!-- Номери сторінок -->
+                <% 
+                    // Показуємо максимум 5 сторінок
+                    let startPage = Math.max(1, currentPage - 2);
+                    let endPage = Math.min(totalPages, currentPage + 2);
+                    
+                    // Якщо на початку - показуємо перші 5
+                    if (currentPage <= 3) {
+                        endPage = Math.min(5, totalPages);
+                    }
+                    
+                    // Якщо в кінці - показуємо останні 5
+                    if (currentPage >= totalPages - 2) {
+                        startPage = Math.max(1, totalPages - 4);
+                    }
+                %>
+
+                <!-- Перша сторінка (якщо не показується) -->
+                <% if (startPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&search=<%= search %>&course=<%= courseFilter %>&sort=<%= sortBy %>&order=<%= sortOrder %>">
+                            1
+                        </a>
+                    </li>
+                    <% if (startPage > 2) { %>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    <% } %>
+                <% } %>
+
+                <!-- Цикл по сторінках -->
+                <% for (let i = startPage; i <= endPage; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>&search=<%= search %>&course=<%= courseFilter %>&sort=<%= sortBy %>&order=<%= sortOrder %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                <% } %>
+
+                <!-- Остання сторінка (якщо не показується) -->
+                <% if (endPage < totalPages) { %>
+                    <% if (endPage < totalPages - 1) { %>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    <% } %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= totalPages %>&search=<%= search %>&course=<%= courseFilter %>&sort=<%= sortBy %>&order=<%= sortOrder %>">
+                            <%= totalPages %>
+                        </a>
+                    </li>
+                <% } %>
+
+                <!-- Наступна сторінка -->
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>&search=<%= search %>&course=<%= courseFilter %>&sort=<%= sortBy %>&order=<%= sortOrder %>">
+                            Наступна →
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link">Наступна →</span>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+
+        <!-- Інфо про пагінацію -->
+        <div class="text-center text-muted">
+            Сторінка <%= currentPage %> з <%= totalPages %> 
+            (показано <%= students.length %> з <%= totalStudents %> студентів)
+        </div>
+    <% } %>
+
+<% } else { %>
+    <!-- Якщо немає студентів -->
+    <div class="alert alert-info">
+        <% if (search || courseFilter) { %>
+            📭 За вашим запитом нічого не знайдено. 
+            <a href="/students">Показати всіх студентів</a>
+        <% } else { %>
+            📭 Список студентів порожній. 
+            <a href="/students/create">Додайте першого студента!</a>
+        <% } %>
+    </div>
+<% } %>

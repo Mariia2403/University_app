@@ -1,0 +1,79 @@
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>👤 Інформація про студента</h1>
+            <div>
+                <a href="/students/<%= student.id %>/edit" class="btn btn-warning">
+                    ✏️ Редагувати
+                </a>
+                <a href="/students" class="btn btn-secondary">
+                    ← Назад
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>ID:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <%= student.id %>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Повне ім'я:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <%= student.firstName %> <%= student.lastName %>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Вік:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <%= student.age %> років
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Курс:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <%= student.course %> курс
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Email:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="mailto:<%= student.email %>"><%= student.email %></a>
+                    </div>
+                </div>
+
+                <% if (student.phone) { %>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Телефон:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="tel:<%= student.phone %>"><%= student.phone %></a>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-4">
+            <strong>💡 Підказка:</strong> Пізніше тут буде інформація про курси студента та його оцінки.
+        </div>
+    </div>
+</div>

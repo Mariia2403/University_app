@@ -1,0 +1,21 @@
+# Залежності (бібліотеки Node.js)
+node_modules/
+
+# Секретні налаштування (паролі)
+.env
+
+# Логи
+*.log
+npm-debug.log*
+
+# OS файли
+.DS_Store
+Thumbs.db
+
+# IDE файли
+.vscode/
+.idea/
+
+# Тимчасові файли
+*.tmp
+*.temp
